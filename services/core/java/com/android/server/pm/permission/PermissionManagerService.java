@@ -116,6 +116,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import android.os.SpaceManager; // AHMED
+
 /**
  * Manages all permissions and handles permissions related tasks.
  */
@@ -2197,6 +2199,13 @@ public class PermissionManagerService {
 
     private void grantRuntimePermission(String permName, String packageName, boolean overridePolicy,
             int callingUid, final int userId, PermissionCallback callback) {
+
+        // check if required permission is already restricted [AHMED]
+        SpaceManager spaceManager = SpaceManager.getInstance();
+        if (spaceManager.isRestricted(permName, packageName)) {
+            return;
+        }
+
         if (!mUserManagerInt.exists(userId)) {
             Log.e(TAG, "No such user:" + userId);
             return;

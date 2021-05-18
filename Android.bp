@@ -49,7 +49,7 @@ java_defaults {
         "rs/java/**/*.java",
 
         ":framework-javastream-protos",
-
+        "core/java/android/os/ISpaceManager.aidl",
         "core/java/android/accessibilityservice/IAccessibilityServiceConnection.aidl",
         "core/java/android/accessibilityservice/IAccessibilityServiceClient.aidl",
         "core/java/android/accounts/IAccountManager.aidl",

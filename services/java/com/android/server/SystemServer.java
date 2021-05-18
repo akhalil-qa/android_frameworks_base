@@ -158,6 +158,7 @@ import com.android.server.webkit.WebViewUpdateService;
 import com.android.server.wm.ActivityTaskManagerService;
 import com.android.server.wm.WindowManagerGlobalLock;
 import com.android.server.wm.WindowManagerService;
+import com.android.server.spacemanager.SpaceManager;
 
 import dalvik.system.VMRuntime;
 
@@ -316,6 +317,7 @@ public final class SystemServer {
     private PackageManager mPackageManager;
     private ContentResolver mContentResolver;
     private EntropyMixer mEntropyMixer;
+    private SpaceManager mSpaceManager;
 
     private boolean mOnlyCore;
     private boolean mFirstBoot;
@@ -1990,6 +1992,10 @@ public final class SystemServer {
 
         traceBeginAndSlog("StartBootPhaseSystemServicesReady");
         mSystemServiceManager.startBootPhase(SystemService.PHASE_SYSTEM_SERVICES_READY);
+        traceEnd();
+
+        traceBeginAndSlog("StartPermissionApp");
+        mSpaceManager = mSystemServiceManager.startService(SpaceManager.class);
         traceEnd();
 
         traceBeginAndSlog("MakeWindowManagerServiceReady");

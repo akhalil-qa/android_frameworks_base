@@ -382,6 +382,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import android.os.SpaceManager; // AHMED
+import com.android.server.spacemanager.Constants; // AHMED
+
 /**
  * Keep track of all those APKs everywhere.
  * <p>
@@ -21430,6 +21433,15 @@ public class PackageManagerService extends IPackageManager.Stub
     @Override
     public void setApplicationEnabledSetting(String appPackageName,
             int newState, int flags, int userId, String callingPackage) {
+
+        // ignore enabling if the application is already restricted [AHMED]
+        if (newState == PackageManager.COMPONENT_ENABLED_STATE_ENABLED && flags != 99) {
+            SpaceManager spaceManager = SpaceManager.getInstance();
+            if (spaceManager.isRestricted(Constants.ASTERISK, appPackageName)) {
+                return;
+            }
+        }
+
         if (!sUserManager.exists(userId)) return;
         if (callingPackage == null) {
             callingPackage = Integer.toString(Binder.getCallingUid());
