@@ -18,19 +18,19 @@ public class Constants {
     public static final String GET_DUMMY_USER_LOCATION_URL = BASE_URL + "/debug/getDummyUserLocation";
 
     // interval to get database updates (in seconds)
-    public static final int DATABASE_UPDATE_INTERVAL = 20; //10;
+    public static final int DATABASE_UPDATE_INTERVAL = 20;
 
     // interval to apply access control (in seconds)
-    public static final int ACCESS_CONTROL_INTERVAL = 10; //5;
+    public static final int ACCESS_CONTROL_INTERVAL = 10;
 
     // interval of requesting location update (in seconds)
-    public static final int REQUEST_LOCATION_UPDATE_INTERVAL = 1;
+    public static final int REQUEST_LOCATION_UPDATE_INTERVAL = 10;
 
     // interval of checking for dummy user location (in seconds)
-    public static final int DUMMY_USER_LOCATION_CHECK_INTERVAL = 60; //10;
+    public static final int DUMMY_USER_LOCATION_CHECK_INTERVAL = 60;
 
     // acceptable time threshold to consider the local database copy as a recent copy (in seconds)
-    public static final int THRESHOLD_OF_LOCAL_DATABASE_RECENCY = 60; //20;
+    public static final int THRESHOLD_OF_LOCAL_DATABASE_RECENCY = 60;
 
     // signature algorithm
     // available algorithms: list can be found here https://developer.android.com/reference/java/security/Signature

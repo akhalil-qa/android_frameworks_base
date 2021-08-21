@@ -185,16 +185,20 @@ public final class SpaceManager extends SystemService {
 
                 Log.d(Constants.TAG, "Current user location is [" + userLocation.getLatitude() + ", " + userLocation.getLongitude() + ", " + userLocation.getAltitude() + "]. [accessControlTask.run()]");
                 
-                // get restriction records
+
+                // clear restriction records
+                restrictionRecords = null;
+
+                // reset restrictions (retrieve user configured permissions)
+                resetRestrictions();
+
+                // get latest restriction records
                 restrictionRecords = getRestrictions();
 
                 Log.d(Constants.TAG, "Final Restrictions List:");
                 for (RestrictionRecord restrictionRecord : restrictionRecords) {
                     Log.d(Constants.TAG, restrictionRecord.toString());
                 }
-
-                // reset restrictions (retrieve user configured permissions)
-                resetRestrictions();
 
                 // if user is in a controlled space (value is null if user in a non-controlled space)
                 if (restrictionRecords != null) {
@@ -529,7 +533,7 @@ public final class SpaceManager extends SystemService {
 
             // if restriction is to disable the application
             if (permission.equals(Constants.ASTERISK)) {
-                Log.d(Constants.TAG, "Perform application disable: " + appId);
+                Log.d(Constants.TAG, "Perform application disable: " + appId + ". [SpaceManager.applyRestrictions()]");
                 restrictionManager.disableApplication(appId);
             }
             // if the restriction is to disable a specific permission on all applications (globally)
@@ -537,15 +541,16 @@ public final class SpaceManager extends SystemService {
                 ArrayList<String> applications = restrictionManager.getAllInstalledApplications();
                 
                 for (String packageName : applications) {
+                    Log.d(Constants.TAG, "Check if permission: " + permission + " is granted to " + packageName + " by the user. [SpaceManager.applyRestrictions()]");
                     if (restrictionManager.isPermissionGranted(permission, packageName)) {
-                        Log.d(Constants.TAG, "Permission: " + permission + " is found to be granted to " + packageName);
+                        Log.d(Constants.TAG, "Permission: " + permission + " is found to be granted to " + packageName + ". [SpaceManager.applyRestrictions()]");
 
                         // store the permission in user granted permissions list
                         userGrantedPermissions.add(new UserGrantedPermission(permission, packageName));
-                        Log.d(Constants.TAG, "Added [" + permission + ", " + packageName + "] to user granted permissions list.");
+                        Log.d(Constants.TAG, "Added [" + permission + ", " + packageName + "] to user granted permissions list. [SpaceManager.applyRestrictions()]");
                     }
-
-                    Log.d(Constants.TAG, "Perform disable " + permission + " in " + packageName);
+                    
+                    Log.d(Constants.TAG, "Perform disable " + permission + " in " + packageName + ". [SpaceManager.applyRestrictions()]");
 
                     // revoke permission
                     restrictionManager.applyRestriction(permission, packageName);
@@ -553,16 +558,16 @@ public final class SpaceManager extends SystemService {
             }
             // check if permission is already granted
             else {
-                Log.d(Constants.TAG, "Check if permission: " + permission + " is granted to " + appId + " by the user.");
+                Log.d(Constants.TAG, "Check if permission: " + permission + " is granted to " + appId + " by the user. [SpaceManager.applyRestrictions()]");
                 if (restrictionManager.isPermissionGranted(permission, appId)) {
-                    Log.d(Constants.TAG, "Permission: " + permission + " is found to be granted to " + appId);
+                    Log.d(Constants.TAG, "Permission: " + permission + " is found to be granted to " + appId + ". [SpaceManager.applyRestrictions()]");
 
                     // store the permission in user granted permissions list
                     userGrantedPermissions.add(new UserGrantedPermission(permission, appId));
-                    Log.d(Constants.TAG, "Added [" + permission + ", " + appId + "] to user granted permissions list.");
+                    Log.d(Constants.TAG, "Added [" + permission + ", " + appId + "] to user granted permissions list. [SpaceManager.applyRestrictions()]");
                 }
 
-                Log.d(Constants.TAG, "Perform disable " + permission + " in " + appId);
+                Log.d(Constants.TAG, "Perform disable " + permission + " in " + appId + ". [SpaceManager.applyRestrictions()]");
 
                 // revoke permission
                 restrictionManager.applyRestriction(permission, appId);
@@ -593,7 +598,7 @@ public final class SpaceManager extends SystemService {
             String permission = userGrantedPermissions.get(i).getPermission();
             String appId = userGrantedPermissions.get(i).getAppId();
 
-            Log.d(Constants.TAG, "Reset " + permission + " for " + appId);
+            Log.d(Constants.TAG, "Reset " + permission + " for " + appId + ". [SpaceManager.resetRestrictions()]");
 
             // reset permission
             restrictionManager.resetRestriction(permission, appId);
@@ -645,7 +650,7 @@ final class SpaceManagerService extends ISpaceManager.Stub {
             return list;
         }
 
-        // checks if the supplied permission and app is is within the restriction records list
+        // checks if the supplied permission and app is within the restriction records list
         // used to integrate with grantRuntimePermission() method to prevent granting permissions to already restricted permissions
         @Override
         public boolean isRestricted(String permission, String appId) {
