@@ -18,10 +18,10 @@ public class Constants {
     public static final String GET_DUMMY_USER_LOCATION_URL = BASE_URL + "/debug/getDummyUserLocation";
 
     // interval to get database updates (in seconds)
-    public static final int DATABASE_UPDATE_INTERVAL = 20;
+    public static final int DATABASE_UPDATE_INTERVAL = 60;
 
     // interval to apply access control (in seconds)
-    public static final int ACCESS_CONTROL_INTERVAL = 10;
+    public static final int ACCESS_CONTROL_INTERVAL = 30;
 
     // interval of requesting location update (in seconds)
     public static final int REQUEST_LOCATION_UPDATE_INTERVAL = 10;

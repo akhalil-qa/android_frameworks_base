@@ -167,7 +167,7 @@ public final class SpaceManager extends SystemService {
 
                 // if fail-secure enabled
                 if (failSecureEnabled) {
-                    Log.d(Constants.TAG, "Fail secure enabeld.  Aborting access control task. [accessControlTask.run()]");
+                    Log.d(Constants.TAG, "Fail secure enabeld. Aborting access control task. [accessControlTask.run()]");
                     return;
                 }
         
@@ -237,7 +237,10 @@ public final class SpaceManager extends SystemService {
         // run tasks
         new Timer().scheduleAtFixedRate(databaseUpdateTask, 0, Constants.DATABASE_UPDATE_INTERVAL*1000);
         new Timer().scheduleAtFixedRate(accessControlTask, 0, Constants.ACCESS_CONTROL_INTERVAL*1000);
-        new Timer().scheduleAtFixedRate(dummyUserLocationTask, 0, Constants.DUMMY_USER_LOCATION_CHECK_INTERVAL*1000); // used for debug
+        //new Timer().scheduleAtFixedRate(dummyUserLocationTask, 0, Constants.DUMMY_USER_LOCATION_CHECK_INTERVAL*1000); // used for debug
+    
+        // TODO: TO BE DELETED [AHMED]
+        this.userLocation = new Coordinate(25.24237, 51.56465, 0); // TODO: TO BE DELETED [AHMED]
     }
 
     // check if location service is enabled
